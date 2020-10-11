@@ -8,6 +8,7 @@ export default class MyDocument extends Document {
           <meta charSet="utf-8" />
           <title>Joinville Implementos</title>
           <meta name="description" content="A melhor maneira de ampliar sua frota"/>
+          <link rel="shortcut icon" href="favicon.svg" type="image/svg-xml"/>
           <style dangerouslySetInnerHTML={{
             __html: `
               body, input, button {
