@@ -3,7 +3,9 @@ export default function Home() {
     <>
       <div className="wrapper">
         <main>
-          <img src="/logojlleimplementos.svg" height="90" alt="Logo Joinville Implementos"/>
+          <picture>
+            <img src="/logojlleimplementos.svg" height="51.23" width="200" alt="Logo Joinville Implementos"/>
+          </picture>
 
           <h1>Quais são os principais benefícios do consórcio?</h1>
 
