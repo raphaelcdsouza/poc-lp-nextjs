@@ -3,6 +3,7 @@ import { useCallback, useState } from "react"
 import * as Yup from 'yup';
 
 import ibgeApi from '../services/ibge';
+import api from '../services/api';
 
 interface IState {
   id: number;
@@ -94,7 +95,7 @@ export default function Home({ cities, states }: IndexProps) {
     const schema = Yup.object().shape({
       name: Yup.string().required('O campo nome é obrigatório'),
       email: Yup.string().email().required('O campo e-mail é obrigatório'),
-      phone: Yup.string().required('O campo telefone é obrigatório'),
+      phone: Yup.number().required('O campo telefone é obrigatório'),
       state: Yup.string().required(),
       city: Yup.string().required(),
     })
@@ -102,17 +103,19 @@ export default function Home({ cities, states }: IndexProps) {
     try {
       await schema.validate(data, { abortEarly: false });
 
-      alert('Funcionou');
-
       setName('');
       setEmail('');
       setPhone('');
       setState('default');
       setCity('default');
-
+      
       setStateSelectedStatus(false);
       setCitySelectedStatus(false);
       setErrors([]);
+      
+      await api.post('register', data);
+
+      alert('Registrado com sucesso');
     } catch (err) {
       setErrors([...err.inner]);
     }
