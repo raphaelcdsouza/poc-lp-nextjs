@@ -95,7 +95,7 @@ export default function Home({ cities, states }: IndexProps) {
     const schema = Yup.object().shape({
       name: Yup.string().required('O campo nome é obrigatório'),
       email: Yup.string().email().required('O campo e-mail é obrigatório'),
-      phone: Yup.number().required('O campo telefone é obrigatório'),
+      phone: Yup.number().typeError('O campo telefone deve possuir apenas numeros e é obrigatório').required('O campo telefone é obrigatório'),
       state: Yup.string().required(),
       city: Yup.string().required(),
     })
@@ -123,60 +123,41 @@ export default function Home({ cities, states }: IndexProps) {
 
   return (
     <div className="wrapper">
-      <div className="content">
-        <main>
-          <img src="/logojlleimplementos.svg" height="89.67" width="350" alt="Logo Joinville Implementos"/>
+      <main>
+        <p>Preencha os dados para receber um contato da nossa equipe!</p>
+        <form onSubmit={handleFormSubmit}>
+          <label htmlFor="name">Nome</label>
+          <input type="text" name="name" id="name" placeholder="Ex.: João da Silva" value={name} onChange={handleNameInput} />
+          <label htmlFor="email">E-mail</label>
+          <input type="text" name="email" id="email" placeholder="Ex.: joao@silva.com.br" value={email} onChange={handleEmailInput} />
+          <label htmlFor="phone">Telefone</label>
+          <input type="text" name="phone" id="phone" placeholder="DDD + número" value={phone} onChange={handlePhoneInput} />
+          <label htmlFor="state">Estado</label>
+          <select name="state" id="state" value={state} onChange={handleSelectState}>
+            <option value="default">Selecione um estado</option>
+            {states.map(state => (
+              <option value={state.nome} key={state.id}>{state.nome}</option>
+            ))}
+          </select>
+          <label htmlFor="city">Cidade</label>
+          <select name="city" id="city" value={city} onChange={handleSelectCity} disabled={!stateSelectedStatus}>
+            <option value="default">Selecione um município</option>
+            {filteredCities.map(city => (
+              <option value={city.nome} key={city.id}>{city.nome}</option>
+            ))}
+          </select>
+          <button type="submit" disabled={!citySelectedStatus}>Receber contato</button>
 
-          <h1>Quais são os principais benefícios do consórcio?</h1>
-
-          <ul>
-            <li>Sem juros</li>
-            <li>Sem entrada</li>
-            <li>Sem taxa de adesão</li>
-            <li>Compra planejada</li>
-          </ul>
-
-          <p>A melhor maneira de <strong>renovar</strong> ou <strong>ampliar</strong> a sua frota é agora</p>
-        </main>
-
-        <aside>
-          <p>Preencha os dados para receber um contato da nossa equipe!</p>
-          <form onSubmit={handleFormSubmit}>
-            <label htmlFor="name">Nome</label>
-            <input type="text" name="name" id="name" placeholder="Ex.: João da Silva" value={name} onChange={handleNameInput} />
-            <label htmlFor="email">E-mail</label>
-            <input type="text" name="email" id="email" placeholder="Ex.: joao@silva.com.br" value={email} onChange={handleEmailInput} />
-            <label htmlFor="phone">Telefone</label>
-            <input type="text" name="phone" id="phone" placeholder="DDD + número" value={phone} onChange={handlePhoneInput} />
-            <label htmlFor="state">Estado</label>
-            <select name="state" id="state" value={state} onChange={handleSelectState}>
-              <option value="default">Selecione um estado</option>
-              {states.map(state => (
-                <option value={state.nome} key={state.id}>{state.nome}</option>
+          {errors.length !== 0 && (
+            <div className="errors">
+              {errors.map(error => (
+                <span key={error.message}>{error.message}</span>
               ))}
-            </select>
-            <label htmlFor="city">Cidade</label>
-            <select name="city" id="city" value={city} onChange={handleSelectCity} disabled={!stateSelectedStatus}>
-              <option value="default">Selecione um município</option>
-              {filteredCities.map(city => (
-                <option value={city.nome} key={city.id}>{city.nome}</option>
-              ))}
-            </select>
-            <button type="submit" disabled={!citySelectedStatus}>Receber contato</button>
-
-            {errors && (
-              <div className="errors">
-                {errors.map(error => (
-                  <span key={error.message}>{error.message}</span>
-                ))}
-              </div>
-            )}
-          </form>
-          <small>Ao receber o conteúdo você concorda em receber materiais periódicos em seu e-mail.</small>
-        </aside>
-      </div>
-
-      <footer><a href="https://www.joinvilleimplementos.com.br">Conheça a Joinville implementos</a></footer>
+            </div>
+          )}
+        </form>
+        <small>Ao receber o conteúdo você concorda em receber materiais periódicos em seu e-mail.</small>
+      </main>
     </div>
   )
 }
